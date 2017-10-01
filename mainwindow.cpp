@@ -7,8 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     srand(QDateTime::currentDateTime().toTime_t());
     ui->setupUi(this);
-    ui->plotDisplay->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
-                                    QCP::iSelectLegend | QCP::iSelectPlottables);
+    ui->plotDisplay->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes);
     ui->plotDisplay->axisRect()->setupFullAxesBox();
     ui->plotDisplay->xAxis->setLabel("x Axis");
     ui->plotDisplay->yAxis->setLabel("y Axis");
@@ -99,7 +98,7 @@ void MainWindow::contextMenuRequest(QPoint pos)
     if (ui->plotDisplay->graphCount() > 0)
     {
         menu->addAction("Remove graph", this, SLOT(removeGraph()));
-        menu->addAction("Add point", this, SLOT(addPointToGraph()));
+        menu->addAction("Add point", this, SLOT(addPointToGraphDialog()));
     }
     menu->popup(ui->plotDisplay->mapToGlobal(pos));
 }
@@ -126,12 +125,11 @@ void MainWindow::addRandomGraph()
     ui->plotDisplay->addGraph();
     ui->plotDisplay->graph()->setName(QString("New graph %1").arg(ui->plotDisplay->graphCount()-1));
     ui->plotDisplay->graph()->setData(x, y);
-    ui->plotDisplay->graph()->setLineStyle((QCPGraph::LineStyle)(rand()%5+1));
-    if (rand()%100 > 50)
-        ui->plotDisplay->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(rand()%14+1)));
+    ui->plotDisplay->graph()->setLineStyle((QCPGraph::LineStyle)(1));
+    ui->plotDisplay->graph()->setScatterStyle(QCPScatterStyle((QCPScatterStyle::ScatterShape)(1)));
     QPen graphPen;
-    graphPen.setColor(QColor(rand()%245+10, rand()%245+10, rand()%245+10));
-    graphPen.setWidthF(rand()/(double)RAND_MAX*2+1);
+    graphPen.setColor(QColor(0, 0, 0));
+    graphPen.setWidthF(1);
     ui->plotDisplay->graph()->setPen(graphPen);
     ui->plotDisplay->replot();
 }
@@ -141,12 +139,14 @@ void MainWindow::addGraphFromFile()
     QMessageBox::about(this,"TODO","Not available in this version");
     return;
     //Read
+    //Parse
     //Visualize
 }
 
-void MainWindow::addPointToGraph()
+void MainWindow::addPointToGraphDialog()
 {
-    QMessageBox::about(this,"TODO","Not available in this version");
+    DialogAddPoint *dialog = new DialogAddPoint(this,ui->plotDisplay);
+    dialog->show();
 }
 
 void MainWindow::removeGraph()

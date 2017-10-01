@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QInputDialog>
 #include "qcustomplot.h"
+#include "dialogaddpoint.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +25,7 @@ private slots:
     void mouseWheel();
     void contextMenuRequest(QPoint pos);
     void addRandomGraph();
-    void addPointToGraph();
+    void addPointToGraphDialog();
     void removeGraph();
     void addGraphFromFile();
     void selectionChanged();

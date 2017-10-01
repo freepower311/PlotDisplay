@@ -26,11 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    dialogaddpoint.cpp
 
 HEADERS += \
         mainwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    dialogaddpoint.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    dialogaddpoint.ui
