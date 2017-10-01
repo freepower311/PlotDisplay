@@ -20,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // connect slot that ties some axis selections together (especially opposite axes):
     connect(ui->plotDisplay, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
-    // connect slots that takes care that when an axis is selected, only that direction can be dragged and zoomed:
-    connect(ui->plotDisplay, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
     connect(ui->plotDisplay, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
 
     // make bottom and left axes transfer their ranges to top and right axes:
@@ -137,7 +135,7 @@ void MainWindow::addRandomGraph()
 void MainWindow::addGraphFromFile()
 {
     removeGraph();
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),"D:/Qt projects/git/PlotDisplay",tr("(*.txt)")); // D:/Qt projects/git/PlotDisplay
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),"/",tr("(*.txt)"));
     QFile file(filename);
     if(file.open(QIODevice::ReadOnly))
     {
