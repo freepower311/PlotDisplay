@@ -136,11 +136,92 @@ void MainWindow::addRandomGraph()
 
 void MainWindow::addGraphFromFile()
 {
-    QMessageBox::about(this,"TODO","Not available in this version");
-    return;
-    //Read
-    //Parse
-    //Visualize
+    removeGraph();
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),"D:/Qt projects/git/PlotDisplay",tr("(*.txt)")); // D:/Qt projects/git/PlotDisplay
+    QFile file(filename);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QVector<double> x, y;
+        QByteArray plotDataArray = file.readAll();
+        QString plotData;
+        QString title;
+        QString yUnits;
+        QString xUnits;
+        int readCount = 0;
+        for ( int i = readCount; i < plotDataArray.size(); i++ )
+        {
+            readCount++;
+            if(plotDataArray[i] == '\r'){
+                title += plotData;
+                plotData.clear();
+                break;
+            }
+            if(plotDataArray[i] == '\n')
+            {
+                continue;
+            }
+            plotData += plotDataArray[i];
+        }
+        for ( int i = readCount; i < plotDataArray.size(); i++ )
+        {
+            readCount++;
+            if(plotDataArray[i] == '\r'){
+                xUnits += plotData;
+                plotData.clear();
+                break;
+            }
+            if(plotDataArray[i] == '\n')
+            {
+                continue;
+            }
+            plotData += plotDataArray[i];
+        }
+        for ( int i = readCount; i < plotDataArray.size(); i++ )
+        {
+            readCount++;
+            if(plotDataArray[i] == '\r'){
+                yUnits += plotData;
+                plotData.clear();
+                break;
+            }
+            if(plotDataArray[i] == '\n')
+            {
+                continue;
+            }
+            plotData += plotDataArray[i];
+        }
+        for ( int i = readCount; i < plotDataArray.size(); i++ )
+        {
+            if(plotDataArray[i] == '\t')
+            {
+                x.append(plotData.toDouble());
+                plotData.clear();
+                continue;
+            }
+            if(plotDataArray[i] == '\r')
+            {
+                y.append(plotData.toDouble());
+                plotData.clear();
+                continue;
+            }
+            if(plotDataArray[i] == ',')
+            {
+                plotData += '.';
+                continue;
+            }
+            if(plotDataArray[i] == '\n')
+            {
+                continue;
+            }
+            plotData += plotDataArray[i];
+        }
+        ui->plotDisplay->xAxis->setLabel("x," + xUnits);
+        ui->plotDisplay->yAxis->setLabel("y," + yUnits);
+        ui->plotDisplay->addGraph();
+        ui->plotDisplay->graph()->setName(title);
+        ui->plotDisplay->graph()->setData(x, y);
+        ui->plotDisplay->replot();
+    }
 }
 
 void MainWindow::addPointToGraphDialog()
